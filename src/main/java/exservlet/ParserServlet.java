@@ -1,8 +1,6 @@
 package exservlet;
 
 
-import exservlet.model.Order;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,14 +22,15 @@ public class ParserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        OrderMapper mapper = new OrderMapper();
+        ParserMapper mapper = new ParserMapper();
 
         String string =  Util.readStream(req.getInputStream());
-        Order order = mapper.parse(string);
-        String proov = mapper.stringify(order);
+
+
+        String proov = mapper.parse(string);
 
         resp.setHeader("Content-Type", "application/json");
-
+//        System.out.println(proov);
         resp.getWriter().print(proov);
 
 
