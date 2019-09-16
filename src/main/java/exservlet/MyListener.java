@@ -7,11 +7,10 @@ import javax.servlet.annotation.WebListener;
 @WebListener()
 public class MyListener implements ServletContextListener{
 
-
+    @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println(33333333);
     }
-
+    @Override
     public void contextDestroyed(ServletContextEvent sce) {
 
     }

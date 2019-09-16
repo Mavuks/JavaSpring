@@ -11,7 +11,7 @@ public class OrderMapper {
         input = input.replace("}","");
         input = input.replace("{","");
         input = input.trim();
-        String[] keyAndValue = input.split(":");
+
 
         if(input.contains("id")){
             String[] keyAndValue1 = input.split(",");
@@ -22,6 +22,7 @@ public class OrderMapper {
             return order;
 
         }
+        String[] keyAndValue = input.split(":");
         String orderNumber = keyAndValue[1].replace("\"", "").trim();
 
         Order order = new Order();

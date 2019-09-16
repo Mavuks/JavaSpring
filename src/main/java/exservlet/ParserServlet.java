@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/api/parser")
-public class parserServlet extends HttpServlet {
+public class ParserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request,
