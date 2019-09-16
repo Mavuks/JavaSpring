@@ -18,13 +18,13 @@ public class ParserMapper {
 
             String key = new StringBuilder(keyAndValue[0]).reverse().toString();
             String value = new StringBuilder(keyAndValue[1]).reverse().toString();
-            if (pairs.length - 1 != i) {
+            if (pairs.length - 1 == i) {
                 result += "" + key + ":";
-                result += "" + value + ",";
+                result += "" + value + "";
 
             }else {
                 result += "" + key + ":";
-                result += "" + value + "";
+                result += "" + value + ",";
             }
 
         }
