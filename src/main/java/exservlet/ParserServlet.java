@@ -22,6 +22,8 @@ public class ParserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
+
         ParserMapper mapper = new ParserMapper();
 
         String string =  Util.readStream(req.getInputStream());
@@ -30,7 +32,7 @@ public class ParserServlet extends HttpServlet {
         String proov = mapper.parse(string);
 
         resp.setHeader("Content-Type", "application/json");
-//        System.out.println(proov);
+
         resp.getWriter().print(proov);
 
 
