@@ -1,12 +1,17 @@
 package exservlet.model;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
-    private static int idCount = 0;
     private long id;
     private String orderNumber;
     private List<Orderrows> orderRows;
@@ -16,22 +21,12 @@ public class Order {
 
 
 
-    public Order(){
-
-
-        this.id = idCount++;
-
-
-
-    }
-
-
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
-                ", orderNumber='" + orderNumber + '\'' +
-                ", orderrows=" + orderRows +
+                "\"id\":" + id +
+                ", \"orderNumber\":\"" + orderNumber + '\"' +
+             //   ", \"orderrows\":" + orderRows +
                 '}';
     }
 

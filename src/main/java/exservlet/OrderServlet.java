@@ -1,7 +1,10 @@
 package exservlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exservlet.dao.OrderDao;
 import exservlet.model.Order;
+import util.DataSourceProvider;
+import util.DbUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,14 +23,25 @@ public class    OrderServlet extends HttpServlet {
                          HttpServletResponse response)
             throws IOException {
 
+        if(request.getParameterMap().containsKey("id")) {
+            String id = request.getParameter("id");
+            Long id1 = Long.parseLong(id);
+            String value = Order.getSaveMap(id1);
+            response.setHeader("Content-Type", "application/json");
+            response.getWriter().print(value);
+        }else{
+            OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
-        String id = request.getParameter("id");
+            response.setHeader("Content-Type", "application/json");
 
-        Long id1 = Long.parseLong(id);
-        String value = Order.getSaveMap(id1);
+            response.getWriter().print(dao.findOrders());
 
-        response.setHeader("Content-Type", "application/json");
-        response.getWriter().print(value);
+        }
+
+
+
+
+
 
         
     }
@@ -37,10 +51,17 @@ public class    OrderServlet extends HttpServlet {
 
 
         String string =  Util.readStream(req.getInputStream());
+       // System.out.println(string);
 
         ObjectMapper asd = new ObjectMapper();
 
         Order order = asd.readValue(string, Order.class);
+
+        DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
+        OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
+
+        dao.insertOrder(order);
+
 
         String value = asd.writeValueAsString(order);
 
