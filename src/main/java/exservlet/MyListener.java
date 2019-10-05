@@ -24,13 +24,13 @@ public class MyListener implements ServletContextListener{
         DataSourceProvider.setConnectionInfo(connectionInfo);
         DataSource dataSource = DataSourceProvider.getDataSource();
 
-        try(Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement();){
+        try(Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement()){
 
             String sql = FileUtil.readFileFromClasspath("schema.sql");
 
+
             stmt.executeUpdate(sql);
 
-          //  System.out.println(sce);
 
         }catch (SQLException e){
             throw new RuntimeException(e);

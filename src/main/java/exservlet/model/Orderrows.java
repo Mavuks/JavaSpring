@@ -1,5 +1,11 @@
 package exservlet.model;
 
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class Orderrows {
 
 
@@ -36,9 +42,9 @@ public class Orderrows {
     @Override
     public String toString() {
         return "{" +
-                "itemName='" + itemName + '\'' +
-                ", quantity=" + quantity +
-                ", price=" + price +
+                "\"itemName\":\"" + itemName + '\"' +
+                ", \"quantity\":" + quantity +
+                ", \"price\":" + price +
                 '}';
     }
 

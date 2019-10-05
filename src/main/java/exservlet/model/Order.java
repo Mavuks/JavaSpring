@@ -26,7 +26,7 @@ public class Order {
         return "{" +
                 "\"id\":" + id +
                 ", \"orderNumber\":\"" + orderNumber + '\"' +
-             //   ", \"orderrows\":" + orderRows +
+                ", \"orderRows\":" + orderRows +
                 '}';
     }
 
