@@ -1,5 +1,7 @@
 package exservlet.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,7 @@ import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Order {
 
     private long id;
@@ -17,17 +20,17 @@ public class Order {
     private List<Orderrows> orderRows;
 
 
-    private static Map<Long,String> saveMap = new HashMap<>();
-
+    private static Map<Long, String> saveMap = new HashMap<>();
 
 
     @Override
     public String toString() {
-        return "{" +
-                "\"id\":" + id +
-                ", \"orderNumber\":\"" + orderNumber + '\"' +
-                ", \"orderRows\":" + orderRows +
-                '}';
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+
+            return null;
+        }
     }
 
     public long getId() {
@@ -66,12 +69,10 @@ public class Order {
 
     public static void setSaveMap(Long id, String orderNumber) {
 
-        saveMap.put(id,orderNumber);
+        saveMap.put(id, orderNumber);
 
 
     }
-
-
 
 
 }

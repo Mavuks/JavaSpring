@@ -31,7 +31,6 @@ public class OrderDao {
             while (rs.next()) {
                 Order order = new Order(rs.getLong("id"), rs.getString("orderNumber"), null);
 
-
                 orders.add(order);
             }
             return orders;

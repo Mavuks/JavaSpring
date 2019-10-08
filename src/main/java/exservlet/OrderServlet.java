@@ -24,28 +24,25 @@ public class OrderServlet extends HttpServlet {
             throws IOException {
 
         Order order = null;
-
+        response.setHeader("Content-Type", "application/json");
         if (request.getParameterMap().containsKey("id")) {
             String id = request.getParameter("id");
-            Long id1 = Long.parseLong(id);
+            Long idValue = Long.parseLong(id);
             DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
             OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
-            order = dao.findOrdersById(id1);
+            order = dao.findOrdersById(idValue);
 
-            response.setHeader("Content-Type", "application/json");//NOPMD
+
             response.getWriter().print(order);
 
         } else {
             OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
-            response.setHeader("Content-Type", "application/json");
 
             response.getWriter().print(dao.findOrders());
 
-
         }
-
 
     }
 
@@ -53,34 +50,34 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String string = Util.readStream(req.getInputStream());
-
-        ObjectMapper asd = new ObjectMapper();
-        Order order = asd.readValue(string, Order.class);
+        ObjectMapper mapper = new ObjectMapper();
+        Order order = mapper.readValue(string, Order.class);
         DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
         OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
-        Order asdf = dao.insertOrder(order);
+        Order orderValue = dao.insertOrder(order);
 
         if (order.getOrderRows() == null) {
 
             resp.setHeader("Content-Type", "application/json");
-            resp.getWriter().print(asdf);
+            resp.getWriter().print(orderValue);
+
 
         } else {
+
+
             for (int i = 0; i < order.getOrderRows().size(); i++) {
 
                 String itemName = order.getOrderRows().get(i).getItemName();
                 int quantity = order.getOrderRows().get(i).getQuantity();
                 Long price = order.getOrderRows().get(i).getPrice();
 
-                dao.insertOrderRow(itemName, quantity, price, asdf.getId());
+                dao.insertOrderRow(itemName, quantity, price, orderValue.getId());
 
             }
-
+            resp.setHeader("Content-Type", "application/json");
+            resp.getWriter().print(orderValue);
         }
-
-        resp.setHeader("Content-Type", "application/json");
-        resp.getWriter().print(asdf);
 
 
     }
@@ -91,12 +88,12 @@ public class OrderServlet extends HttpServlet {
 
 
         String id = req.getParameter("id");
-        Long id1 = Long.parseLong(id);
+        Long idValue = Long.parseLong(id);
 
         DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
         OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
-        dao.deleteRowById(id1);
+        dao.deleteRowById(idValue);
 
 
     }
