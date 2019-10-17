@@ -1,9 +1,11 @@
-package exservlet.model;
+package model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Orderrows {
@@ -11,7 +13,9 @@ public class Orderrows {
 
     private String itemName;
     private Integer quantity;
-    private Long price;
+    private Integer price;
+
+
 
 
     public String getItemName() {
@@ -30,11 +34,11 @@ public class Orderrows {
         this.quantity = quantity;
     }
 
-    public Long getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

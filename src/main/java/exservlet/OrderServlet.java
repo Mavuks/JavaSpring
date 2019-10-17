@@ -1,11 +1,12 @@
 package exservlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import exservlet.dao.OrderDao;
-import exservlet.model.Order;
-import util.DataSourceProvider;
-import util.DbUtil;
+import dao.OrderDao;
+import model.Order;
+import model.ValidationError;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +26,18 @@ public class OrderServlet extends HttpServlet {
 
         Order order = null;
         response.setHeader("Content-Type", "application/json");
+
+        ServletContext context = getServletContext();
+        AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
+
+
+        OrderDao dao = configApplicationContext.getBean(OrderDao.class);
+
+
         if (request.getParameterMap().containsKey("id")) {
             String id = request.getParameter("id");
-            Long idValue = Long.parseLong(id);
-            DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
-            OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
+            int idValue = Integer.parseInt(id);
+
 
             order = dao.findOrdersById(idValue);
 
@@ -37,7 +45,6 @@ public class OrderServlet extends HttpServlet {
             response.getWriter().print(order);
 
         } else {
-            OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
 
             response.getWriter().print(dao.findOrders());
@@ -51,26 +58,39 @@ public class OrderServlet extends HttpServlet {
 
         String string = Util.readStream(req.getInputStream());
         ObjectMapper mapper = new ObjectMapper();
+
         Order order = mapper.readValue(string, Order.class);
-        DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
-        OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
+        ServletContext context = getServletContext();
+        AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
+
+
+        OrderDao dao = configApplicationContext.getBean(OrderDao.class);
 
         Order orderValue = dao.insertOrder(order);
+        if(order.getOrderNumber().length() < 2){
 
-        if (order.getOrderRows() == null) {
+            ValidationError validationError = new ValidationError();
+            validationError.setCode("too_short_number");
+            resp.setHeader("Content-Type", "application/json");
+            resp.getWriter().print(validationError);
+            System.out.println(validationError);
+            resp.setStatus(400);
+        }
+
+        else if (order.getOrderRows() == null) {
 
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().print(orderValue);
-
+            System.out.println("siin1");
 
         } else {
 
-
+            System.out.println("siin2");
             for (int i = 0; i < order.getOrderRows().size(); i++) {
 
                 String itemName = order.getOrderRows().get(i).getItemName();
                 int quantity = order.getOrderRows().get(i).getQuantity();
-                Long price = order.getOrderRows().get(i).getPrice();
+                Integer price = order.getOrderRows().get(i).getPrice();
 
                 dao.insertOrderRow(itemName, quantity, price, orderValue.getId());
 
@@ -88,11 +108,12 @@ public class OrderServlet extends HttpServlet {
 
 
         String id = req.getParameter("id");
-        Long idValue = Long.parseLong(id);
+        Integer idValue = Integer.valueOf(id);
+        ServletContext context = getServletContext();
+        AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
 
-        DataSourceProvider.setConnectionInfo(DbUtil.loadConnectionInfo());
-        OrderDao dao = new OrderDao(DataSourceProvider.getDataSource());
 
+        OrderDao dao = configApplicationContext.getBean(OrderDao.class);
         dao.deleteRowById(idValue);
 
 

@@ -1,34 +1,28 @@
 package util;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
 public class DataSourceProvider {
 
     private static ConnectionInfo connectionInfo;
-    private static BasicDataSource dataSource;
+    private static DriverManagerDataSource driverManagerDataSource;
 
     public static void setConnectionInfo(ConnectionInfo connectionInfo) {
         DataSourceProvider.connectionInfo = connectionInfo;
     }
 
     public static void closePool() {
-        if (dataSource == null) {
+        if (driverManagerDataSource == null) {
             return;
         }
 
-        try {
-            dataSource.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static DataSource getDataSource() {
-        if (dataSource != null) {
-            return dataSource;
+        if (driverManagerDataSource != null) {
+            return driverManagerDataSource;
         }
 
         if (connectionInfo == null) {
@@ -36,13 +30,12 @@ public class DataSourceProvider {
                     "Connection info is not configured. Use setConnectionInfo()");
         }
 
-        dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl(connectionInfo.getUrl());
-        dataSource.setUsername(connectionInfo.getUser());
-        dataSource.setPassword(connectionInfo.getPass());
-        dataSource.setMaxTotal(2);
+        driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("org.postgresql.Driver");
+        driverManagerDataSource.setUrl(connectionInfo.getUrl());
+        driverManagerDataSource.setUsername(connectionInfo.getUser());
+        driverManagerDataSource.setPassword(connectionInfo.getPass());
 
-        return dataSource;
+        return driverManagerDataSource;
     }
 }
