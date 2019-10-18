@@ -21,12 +21,14 @@ import java.util.List;
 @WebServlet("/api/orders")
 public class OrderServlet extends HttpServlet {
 
+    private AnnotationConfigApplicationContext annotationConfigApplicationContext;
+
 
     @Override
     public void init() {
         ServletContext context = getServletContext();
 
-        AnnotationConfigApplicationContext value = (AnnotationConfigApplicationContext) context.getAttribute("context");
+        this.annotationConfigApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
     }
 
 
@@ -38,11 +40,8 @@ public class OrderServlet extends HttpServlet {
         Order order = null;
 
 
-        ServletContext context = getServletContext();
-        AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
 
-
-        OrderDao dao = configApplicationContext.getBean(OrderDao.class);
+        OrderDao dao = annotationConfigApplicationContext.getBean(OrderDao.class);
 
 
         if (request.getParameterMap().containsKey("id")) {
@@ -59,7 +58,7 @@ public class OrderServlet extends HttpServlet {
 
 
             response.getWriter().print(dao.findOrders());
-           // response.setHeader("Content-Type", "application/json");
+            response.setHeader("Content-Type", "application/json");
         }
 
     }
@@ -71,9 +70,8 @@ public class OrderServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         Order order = mapper.readValue(string, Order.class);
 
-        ServletContext context = getServletContext();
-        AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
-        OrderDao dao = configApplicationContext.getBean(OrderDao.class);
+        OrderDao dao = annotationConfigApplicationContext.getBean(OrderDao.class);
+
 
 
         Order orderValue = dao.insertOrder(order);
@@ -122,11 +120,8 @@ public class OrderServlet extends HttpServlet {
 
         String id = req.getParameter("id");
         Integer idValue = Integer.valueOf(id);
-        ServletContext context = getServletContext();
-        AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
+        OrderDao dao = annotationConfigApplicationContext.getBean(OrderDao.class);
 
-
-        OrderDao dao = configApplicationContext.getBean(OrderDao.class);
         dao.deleteRowById(idValue);
 
 
