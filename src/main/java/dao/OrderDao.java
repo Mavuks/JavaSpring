@@ -69,7 +69,7 @@ public class OrderDao {
 
         Order order = null;
 
-
+    
         for (Map<String, Object> map : list) {
 
 

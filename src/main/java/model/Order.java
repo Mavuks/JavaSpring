@@ -19,8 +19,7 @@ public class Order {
     private String orderNumber;
 
     private List<Orderrows> orderRows;
- //  @NonNull
-   // private String orderRows;
+
 
 
 

@@ -21,12 +21,13 @@ import java.util.List;
 @WebServlet("/api/orders")
 public class OrderServlet extends HttpServlet {
 
-//    @Override
-//    public void init() {
-//        ServletContext context = getServletContext();
-//
-//        AnnotationConfigApplicationContext value = (AnnotationConfigApplicationContext) context.getAttribute("context");
-//    }
+
+    @Override
+    public void init() {
+        ServletContext context = getServletContext();
+
+        AnnotationConfigApplicationContext value = (AnnotationConfigApplicationContext) context.getAttribute("context");
+    }
 
 
     @Override
