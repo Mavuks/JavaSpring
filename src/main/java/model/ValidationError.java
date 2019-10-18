@@ -1,10 +1,8 @@
 package model;
 
-import lombok.Data;
-
 import java.util.List;
 
-@Data
+
 public class ValidationError {
     private String code;
     private List<String> arguments;
@@ -28,8 +26,8 @@ public class ValidationError {
     @Override
     public String toString() {
         return "{" +
-                "\"code\":\"" + code + '\"' +
-                ", \"arguments\":" + arguments +
+                "\"code\"=\"" + code + '\"' +
+                ", \"arguments\"=" + arguments +
                 '}';
     }
 }

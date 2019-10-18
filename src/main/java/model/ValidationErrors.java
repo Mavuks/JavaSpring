@@ -2,15 +2,16 @@ package model;
 
 import java.util.List;
 
+
 public class ValidationErrors {
 
-    private List<ValidationErrors> errors;
+    private List<ValidationError> errors;
 
-    public List<ValidationErrors> getErrors() {
+    public List<ValidationError> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<ValidationErrors> errors) {
+    public void setErrors(List<ValidationError> errors) {
         this.errors = errors;
     }
 }

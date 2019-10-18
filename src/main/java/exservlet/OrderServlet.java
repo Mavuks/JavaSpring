@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.OrderDao;
 import model.Order;
 import model.ValidationError;
+import model.ValidationErrors;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletContext;
@@ -13,10 +14,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @WebServlet("/api/orders")
 public class OrderServlet extends HttpServlet {
+
+//    @Override
+//    public void init() {
+//        ServletContext context = getServletContext();
+//
+//        AnnotationConfigApplicationContext value = (AnnotationConfigApplicationContext) context.getAttribute("context");
+//    }
 
 
     @Override
@@ -25,7 +35,7 @@ public class OrderServlet extends HttpServlet {
             throws IOException {
 
         Order order = null;
-        response.setHeader("Content-Type", "application/json");
+
 
         ServletContext context = getServletContext();
         AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
@@ -43,12 +53,12 @@ public class OrderServlet extends HttpServlet {
 
 
             response.getWriter().print(order);
-
+            response.setHeader("Content-Type", "application/json");//NOPMD
         } else {
 
 
             response.getWriter().print(dao.findOrders());
-
+           // response.setHeader("Content-Type", "application/json");
         }
 
     }
@@ -58,34 +68,36 @@ public class OrderServlet extends HttpServlet {
 
         String string = Util.readStream(req.getInputStream());
         ObjectMapper mapper = new ObjectMapper();
-
         Order order = mapper.readValue(string, Order.class);
+
         ServletContext context = getServletContext();
         AnnotationConfigApplicationContext configApplicationContext = (AnnotationConfigApplicationContext) context.getAttribute("context");
-
-
         OrderDao dao = configApplicationContext.getBean(OrderDao.class);
 
+
         Order orderValue = dao.insertOrder(order);
-        if(order.getOrderNumber().length() < 2){
 
+
+        if (order.getOrderNumber().length() < 2) {
+            ValidationErrors validationErrors = new ValidationErrors();
             ValidationError validationError = new ValidationError();
-            validationError.setCode("too_short_number");
-            resp.setHeader("Content-Type", "application/json");
-            resp.getWriter().print(validationError);
-            System.out.println(validationError);
-            resp.setStatus(400);
-        }
+            List<ValidationError> list = new ArrayList<>();
 
-        else if (order.getOrderRows() == null) {
+            validationError.setCode("too_short_orderNumber");
+            list.add(validationError);
+            validationErrors.setErrors(list);
+
+
+            resp.setHeader("Content-Type", "application/json");
+            resp.getWriter().print(mapper.writeValueAsString(validationErrors));
+            resp.setStatus(400);
+        } else if (order.getOrderRows() == null) {
 
             resp.setHeader("Content-Type", "application/json");
             resp.getWriter().print(orderValue);
-            System.out.println("siin1");
 
         } else {
 
-            System.out.println("siin2");
             for (int i = 0; i < order.getOrderRows().size(); i++) {
 
                 String itemName = order.getOrderRows().get(i).getItemName();
