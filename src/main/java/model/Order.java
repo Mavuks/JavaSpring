@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Order {
 
-    private Integer id;
+    private Long id;
 
     private String orderNumber;
 
@@ -32,31 +32,31 @@ public class Order {
             return null;
         }
     }
-//
-//    public long getId() {
-//        return id;
-//    }
-//
-//    public String getOrderNumber() {
-//        return orderNumber;
-//    }
-//
-//    public void setId(long id) {
-//        this.id = id;
-//    }
-//
-//    public void setOrderNumber(String orderNumber) {
-//        this.orderNumber = orderNumber;
-//    }
-//
-//
-//    public List<Orderrows> getOrderRows() {
-//        return orderRows;
-//    }
-//
-//    public void setOrderRows(List<Orderrows> orderRows) {
-//        this.orderRows = orderRows;
-//    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+
+    public List<Orderrows> getOrderRows() {
+        return orderRows;
+    }
+
+    public void setOrderRows(List<Orderrows> orderRows) {
+        this.orderRows = orderRows;
+    }
 
 
 }

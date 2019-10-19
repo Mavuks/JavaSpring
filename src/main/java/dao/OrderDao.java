@@ -45,12 +45,12 @@ public class OrderDao {
                 .usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(data);
 
-        return new Order(id.intValue(), order.getOrderNumber(), order.getOrderRows());
+        return new Order(id.longValue(), order.getOrderNumber(), order.getOrderRows());
 
 
     }
 
-    public int insertOrderRow(String itemname, int quantity, Integer price, int orderId) {
+    public int insertOrderRow(String itemname, int quantity, Integer price, long orderId) {
 
 
         String sql = "insert into \"orderrows\" (itemname, quantity, price, order_id) values (?, ? ,?, ?)";
@@ -60,7 +60,7 @@ public class OrderDao {
 
     }
 
-    public Order findOrdersById(int id) {
+    public Order findOrdersById(long id) {
 
         String sql = "select * from \"orders\"  left join \"orderrows\"  on \"orders\".id= \"orderrows\".order_id where \"orders\".id = ?";
 
@@ -77,14 +77,17 @@ public class OrderDao {
 
             orderrows.add(row);
 
-            order = new Order((Integer) map.get("id"), (String) map.get("orderNumber"), orderrows);
+            Integer idV = (Integer) map.get("id");
+            Long idL = Long.valueOf(idV);
+
+            order = new Order(idL, (String) map.get("orderNumber"), orderrows);
 
         }
 
         return order;
     }
 
-    public void deleteRowById(Integer id) {
+    public void deleteRowById(Long id) {
 
         String sql = "delete from \"orders\" where id =?";
 

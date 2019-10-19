@@ -40,7 +40,6 @@ public class OrderServlet extends HttpServlet {
         Order order = null;
 
 
-
         OrderDao dao = annotationConfigApplicationContext.getBean(OrderDao.class);
 
 
@@ -71,7 +70,6 @@ public class OrderServlet extends HttpServlet {
         Order order = mapper.readValue(string, Order.class);
 
         OrderDao dao = annotationConfigApplicationContext.getBean(OrderDao.class);
-
 
 
         Order orderValue = dao.insertOrder(order);
@@ -119,7 +117,8 @@ public class OrderServlet extends HttpServlet {
 
 
         String id = req.getParameter("id");
-        Integer idValue = Integer.valueOf(id);
+      //  Long idValue = Integer.valueOf(id);
+        Long idValue = Long.valueOf(id);
         OrderDao dao = annotationConfigApplicationContext.getBean(OrderDao.class);
 
         dao.deleteRowById(idValue);
