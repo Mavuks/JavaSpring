@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+
 public class OrderDao {
 
 
@@ -45,8 +46,19 @@ public class OrderDao {
                 .usingGeneratedKeyColumns("id")
                 .executeAndReturnKey(data);
 
-        return new Order(id.longValue(), order.getOrderNumber(), order.getOrderRows());
+        if (order.getOrderRows() != null) {
+            for (int i = 0; i < order.getOrderRows().size(); i++) {
 
+                String itemName = order.getOrderRows().get(i).getItemName();
+                int quantity = order.getOrderRows().get(i).getQuantity();
+                Integer price = order.getOrderRows().get(i).getPrice();
+
+                insertOrderRow(itemName, quantity, price, id.longValue());
+
+            }
+        }
+
+        return new Order(id.longValue(), order.getOrderNumber(), order.getOrderRows());
 
     }
 
@@ -69,8 +81,10 @@ public class OrderDao {
 
         Order order = null;
 
-    
+
         for (Map<String, Object> map : list) {
+
+
 
 
             Orderrows row = new Orderrows((String) map.get("itemName"), (Integer) map.get("quantity"), (Integer) map.get("price"));
@@ -80,14 +94,19 @@ public class OrderDao {
             Integer idV = (Integer) map.get("id");
             Long idL = Long.valueOf(idV);
 
+
             order = new Order(idL, (String) map.get("orderNumber"), orderrows);
 
+
+
         }
+
 
         return order;
     }
 
     public void deleteRowById(Long id) {
+
 
         String sql = "delete from \"orders\" where id =?";
 

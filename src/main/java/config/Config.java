@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
-@ComponentScan(basePackages =  {"dao"})
+@ComponentScan(basePackages =  {"dao","app"})
 public class Config {
 
 
