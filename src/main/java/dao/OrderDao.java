@@ -1,5 +1,6 @@
 package dao;
 
+import model.Installment;
 import model.Order;
 import model.Orderrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,12 +66,12 @@ public class OrderDao {
 
     }
 
-    public int insertOrderRow(String itemname, int quantity, Integer price, long orderId) {
+    public void insertOrderRow(String itemname, int quantity, Integer price, long orderId) {
 
 
         String sql = "insert into \"orderrows\" (itemname, quantity, price, order_id) values (?, ? ,?, ?)";
 
-        return template.update(sql, itemname, quantity, price, orderId);
+        template.update(sql, itemname, quantity, price, orderId);
 
 
     }
@@ -85,8 +89,6 @@ public class OrderDao {
         for (Map<String, Object> map : list) {
 
 
-
-
             Orderrows row = new Orderrows((String) map.get("itemName"), (Integer) map.get("quantity"), (Integer) map.get("price"));
 
             orderrows.add(row);
@@ -96,7 +98,6 @@ public class OrderDao {
 
 
             order = new Order(idL, (String) map.get("orderNumber"), orderrows);
-
 
 
         }
@@ -112,6 +113,60 @@ public class OrderDao {
 
         template.update(sql, id);
 
+    }
+
+    public List<Installment> installments(Long id, LocalDate start, LocalDate end) {
+
+        Order order = findOrdersById(id);
+        int sum = 0;
+
+        for (int i = 0; i < order.getOrderRows().size(); i++) {
+
+            int quantity = order.getOrderRows().get(i).getQuantity();
+            Integer price = order.getOrderRows().get(i).getPrice();
+
+            sum += quantity * price;
+        }
+
+        YearMonth m1 = YearMonth.from(start);
+        YearMonth m2 = YearMonth.from(end);
+
+        long months = m1.until(m2, ChronoUnit.MONTHS) + 1;
+
+        if((sum / months) < 3 & (sum / (months - 1 )) >= 3){
+            months = months - 1;
+        }
+
+
+
+        List<Installment> list = new ArrayList<>();
+        Installment installment = null;
+        LocalDate proov = start;
+        for (int i = 1; i <= months; i++) {
+
+            if ((sum % months) == 1 & i == months) {
+
+                installment = new Installment((int) (sum / months + sum % months), proov);
+                list.add(installment);
+                proov = proov.withDayOfMonth(1).plusMonths(1);
+
+            }else if((sum % months) == 2 & (i == months || i == months - 1) ){
+                installment = new Installment((int) (sum / months + sum % months / 2), proov);
+                list.add(installment);
+                proov = proov.withDayOfMonth(1).plusMonths(1);
+            }
+            else {
+
+                installment = new Installment((int) (sum / months), proov);
+                list.add(installment);
+
+                proov = proov.withDayOfMonth(1).plusMonths(1);
+
+            }
+
+        }
+
+        return list;
     }
 
 
