@@ -141,26 +141,27 @@ public class OrderDao {
 
         List<Installment> list = new ArrayList<>();
         Installment installment = null;
-        LocalDate proov = start;
+
+        LocalDate date = start;
         for (int i = 1; i <= months; i++) {
 
             if ((sum % months) == 1 & i == months) {
 
-                installment = new Installment((int) (sum / months + sum % months), proov);
+                installment = new Installment((int) (sum / months + sum % months), date);
                 list.add(installment);
-                proov = proov.withDayOfMonth(1).plusMonths(1);
+                date = date.withDayOfMonth(1).plusMonths(1);
 
             }else if((sum % months) == 2 & (i == months || i == months - 1) ){
-                installment = new Installment((int) (sum / months + sum % months / 2), proov);
+                installment = new Installment((int) (sum / months + sum % months / 2), date);
                 list.add(installment);
-                proov = proov.withDayOfMonth(1).plusMonths(1);
+                date = date.withDayOfMonth(1).plusMonths(1);
             }
             else {
 
-                installment = new Installment((int) (sum / months), proov);
+                installment = new Installment((int) (sum / months), date);
                 list.add(installment);
 
-                proov = proov.withDayOfMonth(1).plusMonths(1);
+                date = date.withDayOfMonth(1).plusMonths(1);
 
             }
 
