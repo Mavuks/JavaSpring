@@ -32,11 +32,6 @@ public class Installment {
         this.date = date;
     }
 
-    //    @Override
-//    public String toString() {
-//        return MessageFormat.format("{amount: {0}; date: {1}}",
-//                amount, date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-//    }
     @Override
     public String toString() {
         return "{" +

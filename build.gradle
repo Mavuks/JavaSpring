@@ -16,6 +16,7 @@ def aspectjweaverVersion = '1.9.4'
 def postgresVersion = '42.2.7'
 def jacksonDatabindVersion = '2.10.0'
 def javaxAnnotationVersion = '1.3.2'
+def hibernateVersion = '5.4.7.Final'
 
 
 
@@ -27,6 +28,14 @@ dependencies {
     compile group: 'org.springframework',
             name: 'spring-webmvc',
             version: springVersion
+
+    compile group: 'org.springframework',
+            name: 'spring-orm',
+            version: springVersion
+
+    compile group: 'org.hibernate',
+            name: 'hibernate-core',
+            version: hibernateVersion
 
     compile group: 'javax.annotation',
             name: 'javax.annotation-api',

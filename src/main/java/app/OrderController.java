@@ -27,7 +27,9 @@ public class OrderController {
 
     @GetMapping("orders")
     public List<Order> getOrder() {
+
         return dao.findOrders();
+
     }
 
 
@@ -35,12 +37,14 @@ public class OrderController {
     public Order getOrderById(@PathVariable Long id) {
 
         return dao.findOrdersById(id);
+
     }
 
     @PostMapping("orders")
-    public Order saveOrder(@RequestBody @Valid Order order) {
+    public void saveOrder(@RequestBody @Valid Order order) {
 
-        return dao.insertOrder(order);
+        dao.insertOrder(order);
+
     }
 
     @DeleteMapping("orders/{id}")

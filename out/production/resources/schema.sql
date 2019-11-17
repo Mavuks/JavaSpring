@@ -1,28 +1,25 @@
 
---ALTER  table "order"
+DROP TABLE IF EXISTS order_rows;
+DROP TABLE IF EXISTS orders;
+DROP SEQUENCE IF EXISTS seq1;
 
-DROP TABLE IF EXISTS "orderrows";
+CREATE SEQUENCE seq1 AS INTEGER START WITH 1;
 
-
-CREATE TABLE "orderrows" (
-   id serial NOT NULL PRIMARY KEY,
-   order_id int,
-   itemName VARCHAR (255) NOT NULL,
-   quantity int,
-   price int
-
-
+CREATE TABLE orders (
+  id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('seq1'),
+  order_number VARCHAR(255)
 );
 
- DROP TABLE IF EXISTS "orders";
-
-CREATE TABLE "orders" (
-   id serial NOT NULL PRIMARY KEY,
-   orderNumber VARCHAR(255) NOT NULL
+CREATE TABLE order_rows (
+  orders_id BIGINT,
+  item_name VARCHAR(255),
+  price INT,
+  quantity INT,
+    FOREIGN KEY (orders_id)
+    REFERENCES orders(id) ON DELETE CASCADE
 );
 
 
--- ALTER TABLE "orderrows" add constraint fkey FOREIGN key (order_id) REFERENCES "order"(id);
 
 
 

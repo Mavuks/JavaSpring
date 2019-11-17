@@ -4,8 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,18 +22,26 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
+@Entity
+@Table (name = "orders")
+public class Order extends BaseEntity {
 
-public class Order {
-
-    private Long id;
 
     @NotNull
     @Size(min = 2, max = 50)
+    @Column (name = "order_number")
     private String orderNumber;
 
-    @Valid
-    private List<Orderrows> orderRows;
 
+    @Valid
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "order_rows",
+            joinColumns=@JoinColumn(name = "orders_id",
+                    referencedColumnName = "id")
+    )
+    private List<Orderrows> orderRows;
 
 
 
@@ -39,17 +55,11 @@ public class Order {
         }
     }
 
-    public long getId() {
-        return id;
-    }
 
     public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
