@@ -12,7 +12,7 @@ public class ApplicationInitializer extends
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] { MvcConfig.class, HsqlDataSource.class };
+        return new Class[] {MvcConfig.class, PostgresDataSource.class };
     }
 
     @Override

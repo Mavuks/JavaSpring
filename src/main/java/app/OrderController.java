@@ -41,10 +41,8 @@ public class OrderController {
     }
 
     @PostMapping("orders")
-    public void saveOrder(@RequestBody @Valid Order order) {
-
-        dao.insertOrder(order);
-
+    public Order saveOrder(@RequestBody @Valid Order order) {
+        return  dao.insertOrder(order);
     }
 
     @DeleteMapping("orders/{id}")
@@ -55,7 +53,8 @@ public class OrderController {
 
 
     @GetMapping("orders/{id}/installments")
-    public List<Installment> getInstallmentsById(@PathVariable  Long id, @DateTimeFormat(pattern ="yyyy-MM-dd") @RequestParam LocalDate start,
+    public List<Installment> getInstallmentsById(@PathVariable  Long id,
+                                                 @DateTimeFormat(pattern ="yyyy-MM-dd") @RequestParam LocalDate start,
                                                  @DateTimeFormat(pattern ="yyyy-MM-dd") @RequestParam LocalDate end) {
 
         return dao.installments(id,start,end);

@@ -16,14 +16,13 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Embeddable
-@Table (name = "order_rows")
-public class Orderrows{
+@Table(name = "order_rows")
+public class Orderrows {
 
 
-
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 255)
     @Column(name = "item_name")
     private String itemName;
 
@@ -38,11 +37,6 @@ public class Orderrows{
     @Column(name = "price")
     @Min(1L)
     private Integer price;
-
-
-
-
-
 
 
     public String getItemName() {
@@ -78,7 +72,6 @@ public class Orderrows{
                 ", \"price\":" + price +
                 '}';
     }
-
 
 
 }

@@ -22,15 +22,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Entity
-@Table (name = "orders")
+@Table(name = "orders")
 public class Order extends BaseEntity {
 
 
     @NotNull
-    @Size(min = 2, max = 50)
-    @Column (name = "order_number")
+    @Size(min = 2, max = 255)
+    @Column(name = "order_number")
     private String orderNumber;
 
 
@@ -38,11 +38,9 @@ public class Order extends BaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "order_rows",
-            joinColumns=@JoinColumn(name = "orders_id",
-                    referencedColumnName = "id")
-    )
+            joinColumns = @JoinColumn(name = "orders_id",
+                    referencedColumnName = "id"))
     private List<Orderrows> orderRows;
-
 
 
     @Override

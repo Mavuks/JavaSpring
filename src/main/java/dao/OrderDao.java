@@ -29,15 +29,14 @@ public class OrderDao {
 
     }
     @Transactional
-    public void insertOrder(Order order) {
+    public Order insertOrder(Order order) {
 
         if(order.getId() == null){
             em.persist(order);
         }else{
             em.merge(order);
         }
-
-
+        return order;
     }
 
     public Order findOrdersById(long id) {
@@ -45,6 +44,7 @@ public class OrderDao {
         TypedQuery<Order> query = em.createQuery("select p from Order p where p.id = :id", Order.class);
 
         query.setParameter("id", id);
+
 
             return query.getSingleResult();
     }
