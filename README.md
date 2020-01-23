@@ -4,7 +4,9 @@ ICD0011
 Veebirakendused Java baasil
 
 Veebirakenduse loomine Java platvormil.
-Kasutades erinevaid tööriistu:
+Võtab sisse json formaadis tellimuse ja tellimusega seonduvad tellimuseread. Andmed pannakse andmebaasi (postgresql/Hsql).
+<br/>Tellimusi saab küsida id kaudu ja id kaudu kustutada.
+<br/>Kasutades erinevaid tööriistu:
 
     -Servletid,
     -andmevahetus (Json),
